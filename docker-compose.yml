@@ -3,6 +3,8 @@ web:
   image: radioco/web
   links:
     - postgres:postgres
+  volumes:
+    - /usr/src/app/radio/static
   env_file: web/env
   command: radio/configs/docker/docker-entrypoint.sh
 
@@ -11,8 +13,6 @@ nginx:
   image: radioco/nginx
   ports:
     - "80:80"
-  volumes:
-    - /www/static
   volumes_from:
     - web
   links:
