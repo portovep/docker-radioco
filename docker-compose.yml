@@ -1,0 +1,32 @@
+web:
+  restart: always
+  image: radioco/web
+  links:
+    - postgres:postgres
+  env_file: web/env
+  command: radio/configs/docker/docker-entrypoint.sh
+
+nginx:
+  restart: always
+  image: radioco/nginx
+  ports:
+    - "80:80"
+  volumes:
+    - /www/static
+  volumes_from:
+    - web
+  links:
+    - web:web
+
+postgres:
+  restart: always
+  image: postgres:latest
+  volumes_from:
+    - dbstorage
+  ports:
+    - "5432:5432"
+
+dbstorage:
+  image: postgres:latest
+  volumes:
+    - data:/var/lib/postgresql
